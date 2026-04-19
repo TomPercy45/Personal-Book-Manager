@@ -15,38 +15,26 @@ function toggleWishlistFields() {
 
 function openModal(editId = null) {
     const modal = document.getElementById('bookModal');
-    const currentPosWrapper = document.getElementById('currentPosWrapper');
-    const modalTitle = document.getElementById('modalTitle');
-
     if (editId) {
-        // --- EDIT MODE ---
         const book = books.find(b => b.id === editId);
-        modalTitle.innerText = "Edit Book Details";
-        currentPosWrapper.style.display = "block"; // Show current position field
-        
         document.getElementById('editId').value = book.id;
         document.getElementById('title').value = book.title;
         document.getElementById('cover').value = book.cover;
         document.getElementById('totalPages').value = book.total;
         document.getElementById('currentPage').value = book.current;
-        document.getElementById('trackingType').value = book.trackingType || 'pages';
-        document.getElementById('type').value = book.type;
+        document.getElementById('trackingType').value = book.trackingType || 'pages'; // Default to pages for old entries
         document.getElementById('price').value = book.price || '';
         document.getElementById('buyLink').value = book.link || '';
+        document.getElementById('type').value = book.type;
     } else {
-        // --- ADD MODE ---
-        modalTitle.innerText = "Add New Entry";
-        currentPosWrapper.style.display = "none"; // HIDE current position field
-        
+        // RESET FOR NEW BOOK
         document.getElementById('editId').value = "";
         document.getElementById('title').value = "";
         document.getElementById('cover').value = "";
         document.getElementById('totalPages').value = "";
-        document.getElementById('currentPage').value = 0; // Set to 0 in background
+        document.getElementById('currentPage').value = 0; // SET DEFAULT TO 0
         document.getElementById('trackingType').value = 'pages';
-        document.getElementById('type').value = 'library';
     }
-    
     toggleWishlistFields();
     modal.style.display = 'flex';
 }

@@ -74,21 +74,20 @@
     </div>
 </div>
 <div id="libraryFields">
-    <label>Tracking Style</label>
+    <label>Track Progress By</label>
     <select id="trackingType">
-        <option value="pages">Tracking by Pages</option>
-        <option value="chapters">Tracking by Chapters</option>
+        <option value="pages">Pages</option>
+        <option value="chapters">Chapters</option>
     </select>
 
     <div class="input-row">
         <div>
-            <label>Total Count</label>
-            <input type="number" id="totalPages" placeholder="e.g. 50">
+            <label id="totalLabel">Total Units</label>
+            <input type="number" id="totalPages" placeholder="e.g. 350">
         </div>
-        <div id="currentPosWrapper">
-            <label>Current Position</label>
-            <input type="number" id="currentPage">
-        </div>
+        <div>
+            <label id="currentLabel">Current Position</label>
+            <input type="number" id="currentPage"> </div>
     </div>
 </div>
 
