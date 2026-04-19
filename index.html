@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lumina Library</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>Lumina</h1>
+    <button onclick="exportData()" class="btn-action-small">BACKUP</button>
+</header>
+
+<div class="search-container">
+    <input type="text" id="globalSearch" placeholder="Search library..." oninput="render()">
+</div>
+
+<main id="app-content">
+    <div id="unread" class="view active"></div>
+    <div id="in-progress" class="view"></div>
+    <div id="completed" class="view"></div>
+    <div id="wishlist" class="view"></div>
+    
+    <div id="achievements" class="view">
+        <h3 class="view-title">Achievements</h3>
+        <div class="achievements-grid" id="achievementsGrid">
+            </div>
+    </div>
+</main>
+
+<nav class="bottom-nav">
+    <button onclick="showView('unread')" id="nav-unread" class="active">⭕<span>Unread</span></button>
+    <button onclick="showView('in-progress')" id="nav-in-progress">⏳<span>Reading</span></button>
+    <button onclick="showView('completed')" id="nav-completed">✅<span>Done</span></button>
+    <button onclick="showView('wishlist')" id="nav-wishlist">⭐<span>Wish</span></button>
+    <button onclick="showView('achievements')" id="nav-achievements">🏆<span>Awards</span></button>
+</nav>
+
+<button class="fab" onclick="openModal()">+</button>
+
+<div id="bookModal" class="modal">
+    <div class="modal-content">
+        <h2 id="modalTitle">Add New Book</h2>
+        <input type="hidden" id="editId">
+        
+        <label>List Type</label>
+        <select id="type" onchange="toggleWishlistFields()">
+            <option value="library">My Library</option>
+            <option value="wishlist">Wishlist</option>
+        </select>
+
+        <label>Book Title</label>
+        <input type="text" id="title">
+        
+        <label>Cover URL</label>
+        <input type="text" id="cover">
+        
+        <div id="libraryFields">
+            <div class="input-row">
+                <div><label>Total Pages</label><input type="number" id="totalPages"></div>
+                <div><label>Current Page</label><input type="number" id="currentPage"></div>
+            </div>
+        </div>
+
+        <div id="wishlistFields" style="display: none;">
+            <label>Price (£)</label><input type="number" id="price" step="0.01">
+            <label>Purchase Link</label><input type="url" id="buyLink">
+        </div>
+
+        <button class="btn-main" onclick="saveBook()">Save Changes</button>
+        <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+    </div>
+</div>
+
+<script src="achievements.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
