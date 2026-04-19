@@ -38,7 +38,24 @@
         </div>
 </body>
 <body>
-
+<div id="authOverlay" class="modal" style="display: flex; background: var(--bg);">
+    <div class="modal-content" style="max-width: 400px; text-align: center;">
+        <h2 style="color:var(--purple); margin-bottom: 10px;">Lumina Sync</h2>
+        <p style="color:var(--text-dim); font-size: 0.9rem; margin-bottom: 20px;">
+            Create an account to save your library to the cloud.
+        </p>
+        
+        <input type="email" id="authEmail" placeholder="Email Address">
+        <input type="password" id="authPassword" placeholder="Create Password">
+        
+        <button class="btn-main" onclick="handleSignUp()">Create Account</button>
+        
+        <div style="margin-top: 15px; font-size: 0.8rem;">
+            <span style="color: var(--text-dim);">Already have an account?</span>
+            <button onclick="toggleAuthMode()" style="background:none; border:none; color:var(--purple); cursor:pointer; font-weight:bold;">Sign In</button>
+        </div>
+    </div>
+</div>
 <header>
     <h1>Lumina</h1>
     <button onclick="exportData()" class="btn-action-small">BACKUP</button>

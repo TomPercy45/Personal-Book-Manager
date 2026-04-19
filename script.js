@@ -192,4 +192,40 @@ supabase.auth.onAuthStateChange((event, session) => {
     }
 });
 
+async function handleSignUp() {
+    const email = document.getElementById('authEmail').value;
+    const password = document.getElementById('authPassword').value;
+
+    if (!email || !password) {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    // Step 1: Send sign up request to Supabase
+    const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+    });
+
+    if (error) {
+        alert("Error creating account: " + error.message);
+    } else {
+        alert("Account created! Check your email for a confirmation link.");
+    }
+}
+
+// This listens for when a user successfully logs in or signs up
+supabase.auth.onAuthStateChange((event, session) => {
+    if (session) {
+        // Hide the login gate and show the app
+        document.getElementById('authOverlay').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'block';
+        fetchBooks(); // Start loading your books from the cloud
+    } else {
+        // Show the login gate
+        document.getElementById('authOverlay').style.display = 'flex';
+        document.getElementById('mainApp').style.display = 'none';
+    }
+});
+
 render();
