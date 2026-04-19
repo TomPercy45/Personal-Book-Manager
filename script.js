@@ -1,4 +1,26 @@
-let books = JSON.parse(localStorage.getItem('lumina_db')) || [];
+const supabaseUrl = 'https://dfqegppotcuslkrzcpqh.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRmcWVncHBvdGN1c2xrcnpjcHFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1OTk5ODgsImV4cCI6MjA5MjE3NTk4OH0.ft4apDfAmNwneUmm4hc7hIPJNPZdUP80I5G3HH1FHE4';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+let books = [];
+let selectedUnit = 'pages'; // For the toggle we added earlier
+
+async function handleAuth(type) {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    if (!email || !password) return alert("Please enter both email and password");
+
+    const { error } = (type === 'signIn') 
+        ? await supabase.auth.signInWithPassword({ email, password })
+        : await supabase.auth.signUp({ email, password });
+
+    if (error) alert(error.message);
+}
+
+async function handleSignOut() {
+    await supabase.auth.signOut();
+    location.reload();
+}
 
 function showView(viewId) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -36,28 +58,51 @@ function openModal(editId = null) {
 
 function closeModal() { document.getElementById('bookModal').style.display = 'none'; }
 
-function saveBook() {
+// REPLACE your old fetchBooks/saveBook/deleteBook with these:
+async function fetchBooks() {
+    const { data, error } = await supabase
+        .from('books')
+        .select('*')
+        .order('id', { ascending: false });
+    
+    if (error) console.error(error);
+    else {
+        books = data;
+        render(); // This triggers your existing UI drawing logic
+    }
+}
+
+async function saveBook() {
+    const user = (await supabase.auth.getUser()).data.user;
     const id = document.getElementById('editId').value;
-    const type = document.getElementById('type').value;
+    
     const bookData = {
-        id: id ? parseInt(id) : Date.now(),
-        type: type,
+        user_id: user.id,
         title: document.getElementById('title').value,
-        cover: document.getElementById('cover').value || 'https://via.placeholder.com/150',
-        total: parseInt(document.getElementById('totalPages').value) || 1,
+        cover: document.getElementById('cover').value,
+        type: document.getElementById('type').value,
+        unit: selectedUnit,
+        total: parseInt(document.getElementById('totalPages').value) || 0,
         current: parseInt(document.getElementById('currentPage').value) || 0,
-        price: document.getElementById('price').value,
+        price: parseFloat(document.getElementById('price').value) || 0,
         link: document.getElementById('buyLink').value
     };
+
     if (id) {
-        const index = books.findIndex(b => b.id === parseInt(id));
-        books[index] = bookData;
+        await supabase.from('books').update(bookData).eq('id', id);
     } else {
-        books.push(bookData);
+        await supabase.from('books').insert([bookData]);
     }
-    localStorage.setItem('lumina_db', JSON.stringify(books));
+
     closeModal();
-    render();
+    fetchBooks(); // Refresh the list from the cloud
+}
+
+async function deleteBook(id) {
+    if(confirm("Delete this book?")) {
+        await supabase.from('books').delete().eq('id', id);
+        fetchBooks();
+    }
 }
 
 function render() {
@@ -124,14 +169,6 @@ function renderAchievements(query) {
     });
 }
 
-function deleteBook(id) {
-    if(confirm("Delete this book?")) {
-        books = books.filter(b => b.id !== id);
-        localStorage.setItem('lumina_db', JSON.stringify(books));
-        render();
-    }
-}
-
 function exportData() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(books));
     const downloadAnchorNode = document.createElement('a');
@@ -140,5 +177,19 @@ function exportData() {
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
 }
+
+supabase.auth.onAuthStateChange((event, session) => {
+    const authOverlay = document.getElementById('authOverlay');
+    const mainApp = document.getElementById('mainApp');
+    
+    if (session) {
+        authOverlay.style.display = 'none';
+        mainApp.style.display = 'block';
+        fetchBooks(); // Load data from the cloud
+    } else {
+        authOverlay.style.display = 'flex';
+        mainApp.style.display = 'none';
+    }
+});
 
 render();
