@@ -119,11 +119,10 @@ function render() {
                 <img src="${book.cover}" class="cover-preview">
                 <div class="book-info">
                     <span class="book-title">${book.title}</span>
-                    ${infoText}
-                    ${progress}
+                    ${wishlistInfo}
+                    ${progressInfo}
                     <div class="card-actions">
-                        <button class="btn-card edit" onclick="openModal(${book.id})">EDIT</button>
-                        <button class="btn-card del" onclick="deleteBook(${book.id})">DEL</button>
+                        <button class="btn-small" onclick="openModal(${book.id})">EDIT</button>
                     </div>
                 </div>
             </div>`;
@@ -131,36 +130,29 @@ function render() {
         if (containers[targetId]) containers[targetId].innerHTML += card;
     });
 
-    renderAchievements(query);
-}
-
-function renderAchievements(query) {
-    const grid = document.getElementById('achievementsGrid');
-    grid.innerHTML = '';
-    const completedCount = books.filter(b => b.current >= b.total && b.type === 'library').length;
-    const wishlistCount = books.filter(b => b.type === 'wishlist').length;
-
-    achievementData.forEach(ach => {
-        if (!ach.name.toLowerCase().includes(query)) return;
-        
-        let isUnlocked = false;
-        if (ach.type === 'completed' && completedCount >= ach.requirement) isUnlocked = true;
-        if (ach.type === 'wishlist' && wishlistCount >= ach.requirement) isUnlocked = true;
-
-        grid.innerHTML += `
-            <div class="achievement-card ${isUnlocked ? 'unlocked' : ''}">
-                <div style="font-size: 1.5rem; margin-bottom:5px;">${ach.icon}</div>
-                <div>${ach.name}</div>
-            </div>`;
+    // Search Achievements
+    document.querySelectorAll('.achievement-card').forEach(card => {
+        const name = card.getAttribute('data-name').toLowerCase();
+        card.style.display = name.includes(query) ? 'block' : 'none';
     });
+
+    checkAchievements();
 }
 
 function deleteBook(id) {
-    if(confirm("Delete this book?")) {
+    if(confirm("Delete?")) {
         books = books.filter(b => b.id !== id);
         localStorage.setItem('lumina_db', JSON.stringify(books));
         render();
     }
+}
+
+function checkAchievements() {
+    const completedCount = books.filter(b => b.current >= b.total && b.type === 'library').length;
+    if (completedCount >= 1) document.getElementById('ach-1').classList.add('unlocked');
+    if (completedCount >= 5) document.getElementById('ach-5').classList.add('unlocked');
+    if (completedCount >= 10) document.getElementById('ach-10').classList.add('unlocked');
+    if (books.some(b => b.type === 'wishlist')) document.getElementById('ach-wish').classList.add('unlocked');
 }
 
 function exportData() {

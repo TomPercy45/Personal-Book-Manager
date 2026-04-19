@@ -10,11 +10,11 @@
 
 <header>
     <h1>Lumina</h1>
-    <button onclick="exportData()" class="btn-action-small">BACKUP</button>
+    <button onclick="exportData()" class="btn-text">BACKUP</button>
 </header>
 
 <div class="search-container">
-    <input type="text" id="globalSearch" placeholder="Search library..." oninput="render()">
+    <input type="text" id="globalSearch" placeholder="Search books or achievements..." oninput="render()">
 </div>
 
 <main id="app-content">
@@ -26,7 +26,11 @@
     <div id="achievements" class="view">
         <h3 class="view-title">Achievements</h3>
         <div class="achievements-grid" id="achievementsGrid">
-            </div>
+            <div class="achievement-card" id="ach-1" data-name="First Book">📖 First Book</div>
+            <div class="achievement-card" id="ach-5" data-name="5 Books Read">📚 5 Books Read</div>
+            <div class="achievement-card" id="ach-10" data-name="Scholar 10 books">🎓 Scholar (10)</div>
+            <div class="achievement-card" id="ach-wish" data-name="Dreamer Wishlist">✨ Dreamer (Wishlist)</div>
+        </div>
     </div>
 </main>
 
@@ -59,14 +63,22 @@
         
         <div id="libraryFields">
             <div class="input-row">
-                <div><label>Total Pages</label><input type="number" id="totalPages"></div>
-                <div><label>Current Page</label><input type="number" id="currentPage"></div>
+                <div>
+                    <label>Total Pages</label>
+                    <input type="number" id="totalPages">
+                </div>
+                <div>
+                    <label>Current Page</label>
+                    <input type="number" id="currentPage">
+                </div>
             </div>
         </div>
 
         <div id="wishlistFields" style="display: none;">
-            <label>Price (£)</label><input type="number" id="price" step="0.01">
-            <label>Purchase Link</label><input type="url" id="buyLink">
+            <label>Price (£)</label>
+            <input type="number" id="price" step="0.01" placeholder="0.00">
+            <label>Purchase Link</label>
+            <input type="url" id="buyLink" placeholder="https://amazon.com/...">
         </div>
 
         <button class="btn-main" onclick="saveBook()">Save Changes</button>
@@ -92,7 +104,6 @@
     </div>
 </div>
 
-<script src="achievements.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
