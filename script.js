@@ -15,20 +15,38 @@ function toggleWishlistFields() {
 
 function openModal(editId = null) {
     const modal = document.getElementById('bookModal');
+    const currentPosWrapper = document.getElementById('currentPosWrapper');
+    const modalTitle = document.getElementById('modalTitle');
+
     if (editId) {
+        // --- EDIT MODE ---
         const book = books.find(b => b.id === editId);
+        modalTitle.innerText = "Edit Book Details";
+        currentPosWrapper.style.display = "block"; // Show current position field
+        
         document.getElementById('editId').value = book.id;
         document.getElementById('title').value = book.title;
         document.getElementById('cover').value = book.cover;
-        document.getElementById('totalPages').value = book.total || 0;
-        document.getElementById('currentPage').value = book.current || 0;
+        document.getElementById('totalPages').value = book.total;
+        document.getElementById('currentPage').value = book.current;
+        document.getElementById('trackingType').value = book.trackingType || 'pages';
+        document.getElementById('type').value = book.type;
         document.getElementById('price').value = book.price || '';
         document.getElementById('buyLink').value = book.link || '';
-        document.getElementById('type').value = book.type;
     } else {
+        // --- ADD MODE ---
+        modalTitle.innerText = "Add New Entry";
+        currentPosWrapper.style.display = "none"; // HIDE current position field
+        
         document.getElementById('editId').value = "";
         document.getElementById('title').value = "";
+        document.getElementById('cover').value = "";
+        document.getElementById('totalPages').value = "";
+        document.getElementById('currentPage').value = 0; // Set to 0 in background
+        document.getElementById('trackingType').value = 'pages';
+        document.getElementById('type').value = 'library';
     }
+    
     toggleWishlistFields();
     modal.style.display = 'flex';
 }
@@ -44,6 +62,7 @@ function saveBook() {
         type: type,
         title: document.getElementById('title').value,
         cover: document.getElementById('cover').value || 'https://via.placeholder.com/150',
+        trackingType: document.getElementById('trackingType').value, // NEW
         total: parseInt(document.getElementById('totalPages').value) || 1,
         current: parseInt(document.getElementById('currentPage').value) || 0,
         price: document.getElementById('price').value,
@@ -85,11 +104,14 @@ function render() {
             else targetId = 'in-progress';
         }
 
-        const wishlistInfo = book.type === 'wishlist' ? 
-            `<div class="price-tag">£${book.price || '0.00'}</div>
-             <a href="${book.link}" target="_blank" style="color:var(--purple); font-size:10px;">Buy Link</a>` : '';
+        // DYNAMIC UNIT LABEL
+        const unitLabel = book.trackingType === 'chapters' ? 'Ch.' : 'p.';
 
-        const progressInfo = book.type === 'library' ? 
+        const infoText = book.type === 'wishlist' ? 
+            `<div style="color:var(--purple); font-weight:bold;">£${book.price || '0.00'}</div>` : 
+            `<div style="font-size:0.7rem; color:var(--text-dim)">${unitLabel} ${book.current} / ${book.total}</div>`;
+
+        const progress = book.type === 'library' ? 
             `<div class="progress-container"><div class="progress-fill" style="width: ${percent}%"></div></div>` : '';
 
         const card = `
