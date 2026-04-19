@@ -22,13 +22,18 @@ function openModal(editId = null) {
         document.getElementById('cover').value = book.cover;
         document.getElementById('totalPages').value = book.total;
         document.getElementById('currentPage').value = book.current;
+        document.getElementById('trackingType').value = book.trackingType || 'pages'; // Default to pages for old entries
         document.getElementById('price').value = book.price || '';
         document.getElementById('buyLink').value = book.link || '';
         document.getElementById('type').value = book.type;
     } else {
+        // RESET FOR NEW BOOK
         document.getElementById('editId').value = "";
         document.getElementById('title').value = "";
         document.getElementById('cover').value = "";
+        document.getElementById('totalPages').value = "";
+        document.getElementById('currentPage').value = 0; // SET DEFAULT TO 0
+        document.getElementById('trackingType').value = 'pages';
     }
     toggleWishlistFields();
     modal.style.display = 'flex';
@@ -39,22 +44,26 @@ function closeModal() { document.getElementById('bookModal').style.display = 'no
 function saveBook() {
     const id = document.getElementById('editId').value;
     const type = document.getElementById('type').value;
+    
     const bookData = {
         id: id ? parseInt(id) : Date.now(),
         type: type,
         title: document.getElementById('title').value,
         cover: document.getElementById('cover').value || 'https://via.placeholder.com/150',
+        trackingType: document.getElementById('trackingType').value, // NEW
         total: parseInt(document.getElementById('totalPages').value) || 1,
         current: parseInt(document.getElementById('currentPage').value) || 0,
         price: document.getElementById('price').value,
         link: document.getElementById('buyLink').value
     };
+
     if (id) {
         const index = books.findIndex(b => b.id === parseInt(id));
         books[index] = bookData;
     } else {
         books.push(bookData);
     }
+
     localStorage.setItem('lumina_db', JSON.stringify(books));
     closeModal();
     render();
@@ -73,16 +82,25 @@ function render() {
 
     books.forEach(book => {
         if (!book.title.toLowerCase().includes(query)) return;
+
         const percent = Math.round((book.current / book.total) * 100);
         let targetId = book.type === 'wishlist' ? 'wishlist' : '';
+        
         if (book.type === 'library') {
             if (book.current === 0) targetId = 'unread';
             else if (book.current >= book.total) targetId = 'completed';
             else targetId = 'in-progress';
         }
 
-        const infoText = book.type === 'wishlist' ? `<div style="color:var(--purple); font-weight:bold;">£${book.price || '0.00'}</div>` : `<div style="font-size:0.7rem; color:var(--text-dim)">${book.current} / ${book.total} pages</div>`;
-        const progress = book.type === 'library' ? `<div class="progress-container"><div class="progress-fill" style="width: ${percent}%"></div></div>` : '';
+        // DYNAMIC UNIT LABEL
+        const unitLabel = book.trackingType === 'chapters' ? 'Ch.' : 'p.';
+
+        const infoText = book.type === 'wishlist' ? 
+            `<div style="color:var(--purple); font-weight:bold;">£${book.price || '0.00'}</div>` : 
+            `<div style="font-size:0.7rem; color:var(--text-dim)">${unitLabel} ${book.current} / ${book.total}</div>`;
+
+        const progress = book.type === 'library' ? 
+            `<div class="progress-container"><div class="progress-fill" style="width: ${percent}%"></div></div>` : '';
 
         const card = `
             <div class="book-card">
@@ -97,6 +115,7 @@ function render() {
                     </div>
                 </div>
             </div>`;
+        
         if (containers[targetId]) containers[targetId].innerHTML += card;
     });
 
