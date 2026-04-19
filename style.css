@@ -68,3 +68,30 @@ input, select { width: 100%; padding: 10px; margin-top: 5px; background: var(--i
 .achievements-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .achievement-card { background: var(--card-bg); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid var(--border); opacity: 0.2; font-size: 0.8rem; }
 .achievement-card.unlocked { opacity: 1; border-color: var(--purple); box-shadow: 0 0 10px rgba(168, 85, 247, 0.2); }
+.unit-toggle {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 15px;
+    background: var(--inner-bg);
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.btn-toggle {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-toggle.active {
+    background: var(--purple);
+    color: white;
+}

@@ -74,6 +74,23 @@
     </div>
 </div>
 
+<label>Tracking Unit</label>
+    <div class="unit-toggle">
+        <button type="button" id="unit-pages" class="btn-toggle active" onclick="setUnit('pages')">Pages</button>
+        <button type="button" id="unit-chapters" class="btn-toggle" onclick="setUnit('chapters')">Chapters</button>
+    </div>
+
+    <div class="input-row">
+        <div>
+            <label id="totalLabel">Total Pages</label>
+            <input type="number" id="totalPages">
+        </div>
+        <div id="currentProgressWrapper">
+            <label id="currentLabel">Current Page</label>
+            <input type="number" id="currentPage">
+        </div>
+    </div>
+</div>
 <script src="achievements.js"></script>
 <script src="script.js"></script>
 </body>
