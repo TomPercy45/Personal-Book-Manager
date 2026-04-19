@@ -10,21 +10,8 @@
 
 <header>
     <h1>Lumina</h1>
-    <div>
-        <button onclick="document.getElementById('settingsModal').style.display='flex'" class="btn-action-small">⚙️ SETTINGS</button>
-    </div>
+    <button onclick="exportData()" class="btn-action-small">BACKUP</button>
 </header>
-
-<div id="settingsModal" class="modal">
-    <div class="modal-content">
-        <h3>GitHub Sync Settings</h3>
-        <input type="text" id="gh-user" placeholder="GitHub Username">
-        <input type="text" id="gh-repo" placeholder="Repository Name">
-        <input type="password" id="gh-token" placeholder="Personal Access Token">
-        <button class="btn-main" onclick="saveSettings()">Save & Sync</button>
-        <button class="btn-secondary" onclick="document.getElementById('settingsModal').style.display='none'">Close</button>
-    </div>
-</div>
 
 <div class="search-container">
     <input type="text" id="globalSearch" placeholder="Search library..." oninput="render()">
