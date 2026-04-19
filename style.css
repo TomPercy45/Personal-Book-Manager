@@ -68,3 +68,51 @@ input, select { width: 100%; padding: 10px; margin-top: 5px; background: var(--i
 .achievements-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .achievement-card { background: var(--card-bg); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid var(--border); opacity: 0.2; font-size: 0.8rem; }
 .achievement-card.unlocked { opacity: 1; border-color: var(--purple); box-shadow: 0 0 10px rgba(168, 85, 247, 0.2); }
+.stats-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.stats-year {
+    color: var(--purple);
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 5px;
+}
+
+.stats-grid {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-main);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stats-footer {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    background: var(--inner-bg);
+    padding: 10px;
+    border-radius: 8px;
+}

@@ -56,6 +56,16 @@ function saveBook() {
         books.push(bookData);
     }
     localStorage.setItem('lumina_db', JSON.stringify(books));
+    // Add this logic inside your saveBook function
+    if (bookData.current >= bookData.total && bookData.total > 0) {
+    // Only set the year if it wasn't already set (to keep the original completion year)
+    if (!bookData.completedYear) {
+        bookData.completedYear = new Date().getFullYear();
+    }
+    } else {
+    // If they move it back from completed, remove the year
+    bookData.completedYear = null;
+}
     closeModal();
     render();
 }
@@ -123,6 +133,73 @@ function renderAchievements(query) {
             </div>`;
     });
 }
+
+function renderStats() {
+    const container = document.getElementById('statsContainer');
+    container.innerHTML = '';
+
+    // 1. Filter only completed books that have a year assigned
+    const completedBooks = books.filter(b => b.completedYear);
+
+    // 2. Group books by year
+    const statsByYear = {};
+    completedBooks.forEach(book => {
+        const year = book.completedYear;
+        if (!statsByYear[year]) {
+            statsByYear[year] = { count: 0, pages: 0, longest: { title: 'None', val: 0, unit: '' } };
+        }
+        
+        statsByYear[year].count++;
+        statsByYear[year].pages += (book.total || 0);
+
+        // Track longest book
+        if (book.total > statsByYear[year].longest.val) {
+            statsByYear[year].longest = { 
+                title: book.title, 
+                val: book.total, 
+                unit: book.unit || 'pages' 
+            };
+        }
+    });
+
+    // 3. Sort years descending (newest first)
+    const sortedYears = Object.keys(statsByYear).sort((a, b) => b - a);
+
+    if (sortedYears.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color:var(--text-dim); margin-top:20px;">Finish a book to see your stats!</p>`;
+        return;
+    }
+
+    // 4. Build the HTML
+    sortedYears.forEach(year => {
+        const data = statsByYear[year];
+        container.innerHTML += `
+            <div class="stats-card">
+                <div class="stats-year">${year}</div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-value">${data.count}</span>
+                        <span class="stat-label">Books Read</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">${data.pages.toLocaleString()}</span>
+                        <span class="stat-label">Total Units</span>
+                    </div>
+                </div>
+                <div class="stats-footer">
+                    <strong>Longest:</strong> ${data.longest.title} (${data.longest.val} ${data.longest.unit})
+                </div>
+            </div>
+        `;
+    });
+}
+
+// Ensure renderStats is called when the view changes
+const originalShowView = showView;
+showView = function(viewId) {
+    originalShowView(viewId);
+    if (viewId === 'stats') renderStats();
+};
 
 function deleteBook(id) {
     if(confirm("Delete this book?")) {
