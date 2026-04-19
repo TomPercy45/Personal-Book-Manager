@@ -1,0 +1,70 @@
+:root {
+    --bg: #212121;
+    --card-bg: #2d2d2d;
+    --inner-bg: #1a1a1a;
+    --border: #3d3d3d;
+    --purple: #a855f7;
+    --text-main: #f4f4f5;
+    --text-dim: #a1a1aa;
+    --danger: #ef4444;
+}
+
+body { margin: 0; background-color: var(--bg); color: var(--text-main); font-family: -apple-system, sans-serif; padding-bottom: 90px; }
+header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+h1 { color: var(--purple); margin: 0; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
+
+/* The Styled Backup Button */
+.btn-action-small {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--purple);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.search-container { padding: 0 15px 15px 15px; }
+#globalSearch { width: 100%; padding: 12px 15px; background: var(--inner-bg); border: 1px solid var(--border); border-radius: 10px; color: white; outline: none; }
+
+.view { display: none; padding: 15px; }
+.view.active { display: block; }
+.view-title { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 15px; }
+
+/* Card Buttons */
+.card-actions { display: flex; gap: 8px; margin-top: 12px; }
+.btn-card {
+    background: var(--inner-bg);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    flex: 1;
+}
+.btn-card.edit { color: var(--purple); border-color: var(--purple); }
+.btn-card.del { color: var(--danger); }
+
+/* Rest of the UI */
+.book-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 12px; display: flex; gap: 12px; }
+.cover-preview { width: 65px; height: 95px; border-radius: 4px; object-fit: cover; background: var(--inner-bg); }
+.book-info { flex: 1; }
+.progress-container { width: 100%; background: var(--inner-bg); height: 5px; border-radius: 10px; margin: 8px 0; }
+.progress-fill { background: var(--purple); height: 100%; border-radius: 10px; }
+
+.bottom-nav { position: fixed; bottom: 0; width: 100%; background: #1a1a1a; border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 10px 0 20px 0; }
+.bottom-nav button { background: none; border: none; color: #555; display: flex; flex-direction: column; align-items: center; }
+.bottom-nav button.active { color: var(--purple); }
+
+.fab { position: fixed; bottom: 80px; right: 20px; background: var(--purple); color: white; width: 50px; height: 50px; border-radius: 25px; border: none; font-size: 24px; }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 1000; }
+.modal-content { background: var(--card-bg); width: 85%; padding: 20px; border-radius: 20px; }
+input, select { width: 100%; padding: 10px; margin-top: 5px; background: var(--inner-bg); border: 1px solid var(--border); border-radius: 8px; color: white; box-sizing: border-box; }
+.btn-main { background: var(--purple); border: none; color: white; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; margin-top: 15px; }
+.btn-secondary { background: none; border: none; color: var(--text-dim); width: 100%; margin-top: 10px; }
+
+.achievements-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.achievement-card { background: var(--card-bg); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid var(--border); opacity: 0.2; font-size: 0.8rem; }
+.achievement-card.unlocked { opacity: 1; border-color: var(--purple); box-shadow: 0 0 10px rgba(168, 85, 247, 0.2); }
