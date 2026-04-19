@@ -3,38 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Amethyst Library</title>
+    <title>Lumina Library</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <header>
-        <h1>Amethyst Library</h1>
-        <button id="add-btn" class="plus-btn">+</button>
-    </header>
 
-    <main id="app-content">
-        <section id="view-unread" class="view"><h2>Unread</h2><div class="list"></div></section>
-        <section id="view-progress" class="view" style="display:none"><h2>In Progress</h2><div class="list"></div></section>
-        <section id="view-read" class="view" style="display:none"><h2>Read</h2><div class="list"></div></section>
-        <section id="view-wishlist" class="view" style="display:none"><h2>Wishlist</h2><div class="list"></div></section>
-        <section id="view-stats" class="view" style="display:none">
-            <h2>Stats</h2>
-            <select id="stats-year-select"></select>
-            <div id="stats-container"></div>
-        </section>
-        <section id="view-achievements" class="view" style="display:none"><h2>Achievements</h2><div class="list"></div></section>
-    </main>
+<header>
+    <h1>Lumina</h1>
+    <button onclick="exportData()" class="btn-text">BACKUP</button>
+</header>
 
-    <nav class="bottom-nav">
-        <button onclick="showView('unread')">📚</button>
-        <button onclick="showView('progress')">📖</button>
-        <button onclick="showView('read')">✅</button>
-        <button onclick="showView('stats')">📊</button>
-        <button onclick="showView('achievements')">🏆</button>
-    </nav>
+<div class="search-container">
+    <input type="text" id="globalSearch" placeholder="Search books or achievements..." oninput="render()">
+</div>
 
-    <script src="app.js"></script>
+<main id="app-content">
+    <div id="unread" class="view active"></div>
+    <div id="in-progress" class="view"></div>
+    <div id="completed" class="view"></div>
+    <div id="wishlist" class="view"></div>
+    
+    <div id="achievements" class="view">
+        <h3 class="view-title">Achievements</h3>
+        <div class="achievements-grid" id="achievementsGrid">
+            <div class="achievement-card" id="ach-1" data-name="First Book">📖 First Book</div>
+            <div class="achievement-card" id="ach-5" data-name="5 Books Read">📚 5 Books Read</div>
+            <div class="achievement-card" id="ach-10" data-name="Scholar 10 books">🎓 Scholar (10)</div>
+            <div class="achievement-card" id="ach-wish" data-name="Dreamer Wishlist">✨ Dreamer (Wishlist)</div>
+        </div>
+    </div>
+</main>
+
+<nav class="bottom-nav">
+    <button onclick="showView('unread')" id="nav-unread" class="active">⭕<span>Unread</span></button>
+    <button onclick="showView('in-progress')" id="nav-in-progress">⏳<span>Reading</span></button>
+    <button onclick="showView('completed')" id="nav-completed">✅<span>Done</span></button>
+    <button onclick="showView('wishlist')" id="nav-wishlist">⭐<span>Wish</span></button>
+    <button onclick="showView('achievements')" id="nav-achievements">🏆<span>Awards</span></button>
+</nav>
+
+<button class="fab" onclick="openModal()">+</button>
+
+<div id="bookModal" class="modal">
+    <div class="modal-content">
+        <h2 id="modalTitle">Add New Book</h2>
+        <input type="hidden" id="editId">
+        
+        <label>List Type</label>
+        <select id="type" onchange="toggleWishlistFields()">
+            <option value="library">My Library</option>
+            <option value="wishlist">Wishlist</option>
+        </select>
+
+        <label>Book Title</label>
+        <input type="text" id="title">
+        
+        <label>Cover URL</label>
+        <input type="text" id="cover">
+        
+        <div id="libraryFields">
+            <div class="input-row">
+                <div>
+                    <label>Total Pages</label>
+                    <input type="number" id="totalPages">
+                </div>
+                <div>
+                    <label>Current Page</label>
+                    <input type="number" id="currentPage">
+                </div>
+            </div>
+        </div>
+
+        <div id="wishlistFields" style="display: none;">
+            <label>Price (£)</label>
+            <input type="number" id="price" step="0.01" placeholder="0.00">
+            <label>Purchase Link</label>
+            <input type="url" id="buyLink" placeholder="https://amazon.com/...">
+        </div>
+
+        <button class="btn-main" onclick="saveBook()">Save Changes</button>
+        <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
